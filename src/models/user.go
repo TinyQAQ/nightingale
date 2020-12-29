@@ -96,13 +96,14 @@ func InitRooter() {
 }
 
 func LdapLogin(user, pass string) (*User, error) {
+	userNameArr := strings.Split(user, "@")
 	sr, err := ldapReq(user, pass)
 	if err != nil {
 		return nil, err
 	}
 
 	var u User
-	has, err := DB["rdb"].Where("username=?", user).Get(&u)
+	has, err := DB["rdb"].Where("username=?", userNameArr[0]).Get(&u)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +119,7 @@ func LdapLogin(user, pass string) (*User, error) {
 		}
 	}
 
-	u.Username = user
+	u.Username = userNameArr[0]
 	u.Password = "******"
 	u.UUID = GenUUIDForUser(user)
 	_, err = DB["rdb"].Insert(u)
