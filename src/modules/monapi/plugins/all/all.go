@@ -2,12 +2,13 @@ package all
 
 import (
 	// remote
-	_ "github.com/didi/nightingale/src/modules/monapi/plugins/api"
+	// _ "github.com/didi/nightingale/src/modules/monapi/plugins/api"
 	// telegraf style
+	_ "github.com/didi/nightingale/src/modules/monapi/plugins/github"
 	_ "github.com/didi/nightingale/src/modules/monapi/plugins/mongodb"
 	_ "github.com/didi/nightingale/src/modules/monapi/plugins/mysql"
 	_ "github.com/didi/nightingale/src/modules/monapi/plugins/redis"
-	// _ "github.com/didi/nightingale/src/modules/monapi/plugins/github"
+	_ "github.com/didi/nightingale/src/modules/monapi/plugins/nginx"
 
 	// local
 	_ "github.com/didi/nightingale/src/modules/monapi/plugins/log"

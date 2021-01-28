@@ -25,6 +25,7 @@ func userListGet(c *gin.Context) {
 
 	for i := 0; i < len(list); i++ {
 		list[i].UUID = ""
+		auth.PrepareUser(&list[i])
 	}
 
 	renderData(c, gin.H{
@@ -74,17 +75,18 @@ func userAddPost(c *gin.Context) {
 	now := time.Now().Unix()
 	b, _ := json.Marshal([]string{pass})
 	u := models.User{
-		Username:  f.Username,
-		Password:  pass,
-		Passwords: string(b),
-		Dispname:  f.Dispname,
-		Phone:     f.Phone,
-		Email:     f.Email,
-		Im:        f.Im,
-		IsRoot:    f.IsRoot,
-		LeaderId:  f.LeaderId,
-		UpdatedAt: now,
-		UUID:      models.GenUUIDForUser(f.Username),
+		Username:     f.Username,
+		Password:     pass,
+		Passwords:    string(b),
+		Dispname:     f.Dispname,
+		Phone:        f.Phone,
+		Email:        f.Email,
+		Im:           f.Im,
+		IsRoot:       f.IsRoot,
+		LeaderId:     f.LeaderId,
+		Organization: f.Organization,
+		UpdatedAt:    now,
+		UUID:         models.GenUUIDForUser(f.Username),
 	}
 
 	if f.LeaderId != 0 {
@@ -102,6 +104,9 @@ func userAddPost(c *gin.Context) {
 func userProfileGet(c *gin.Context) {
 	user := User(urlParamInt64(c, "id"))
 	user.UUID = ""
+
+	auth.PrepareUser(user)
+
 	renderData(c, user, nil)
 }
 

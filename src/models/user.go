@@ -63,6 +63,7 @@ type User struct {
 	LockedAt     int64     `json:"locked_at" description:"locked time"`
 	UpdatedAt    int64     `json:"updated_at" description:"user info change time"`
 	PwdUpdatedAt int64     `json:"pwd_updated_at" description:"password change time"`
+	PwdExpiresAt int64     `xorm:"-" json:"pwd_expires_at" description:"password expires time"`
 	LoggedAt     int64     `json:"logged_at" description:"last logged time"`
 	CreateAt     time.Time `json:"create_at" xorm:"<-"`
 }
@@ -412,18 +413,18 @@ func (u *User) CanModifyTeam(t *Team) (bool, error) {
 
 func (u *User) CheckPermByNode(node *Node, operation string) {
 	if node == nil {
-		errors.Bomb("node is nil")
+		errors.Bomb(_s("node is nil"))
 	}
 
 	if operation == "" {
-		errors.Bomb("operation is blank")
+		errors.Bomb(_s("operation is blank"))
 	}
 
 	has, err := u.HasPermByNode(node, operation)
 	errors.Dangerous(err)
 
 	if !has {
-		errors.Bomb("no privilege")
+		errors.Bomb(_s("no privilege"))
 	}
 }
 
@@ -478,7 +479,7 @@ func (u *User) CheckPermGlobal(operation string) {
 	errors.Dangerous(err)
 
 	if !has {
-		errors.Bomb("no privilege")
+		errors.Bomb(_s("no privilege"))
 	}
 }
 
